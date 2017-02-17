@@ -1,41 +1,29 @@
 var Twitter = require('twitter');
-var keyinfo = require('./keyinfo.js');    //store API info here in order to keep private.
 
 var client = new Twitter({
-  consumer_key: keyinfo.TWITTER_CONSUMER_KEY,
-  consumer_secret: keyinfo.TWITTER_CONSUMER_SECRET,
-  access_token_key: keyinfo.ACCESS_TOKEN_KEY,
-  access_token_secret: keyinfo.ACCESS_TOKEN_SECRET,
-  bearer_token: keyinfo.TWITTER_BEARER_TOKEN
+  consumer_key: process.env.TWITTER_CONSUMER_KEY,
+  consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
+  access_token_key: process.env.ACCESS_TOKEN_KEY,
+  access_token_secret: process.env.ACCESS_TOKEN_SECRET,
+  bearer_token: process.env.TWITTER_BEARER_TOKEN
 });
 
-/*
-  create a new random date starting Mon Sep 15 17:21:54 +0000 2008
-  1221499314000
-*/
-var year = Math.floor(Math.random() * 9) + 2009;
-var month = Math.floor(Math.random() * 12) + 1;
-var day = Math.floor(Math.random() * 31) + 1;
-
-dateString = year + "-" + month + "-" + day
-console.log(dateString);
-
+//establish parameters for our request
 var params = {
   screen_name: 'dril',
-  count: 1, //only pull 1 tweet max.  Minimize API traffic by randomizing first.
-  since: dateString,
-  until: dateString
+  count: 200
 };
 
+//call the user timeline API using our parameters
 client.get('statuses/user_timeline', params, function(error, tweets, response) {
   if (!error) {
-    console.log(response);
-    console.log("\n\n");
-    console.log(tweets);
+    //console.log(tweets);
+    var random = Math.floor(Math.random() * params.count) + 1;
+    var selectedTweet = tweets[random].id;
+    return selectedTweet;
   } else {
-    console.log("error\n");
+    console.log("error:\n");
     console.log(error);
+    return error;
   }
 });
-
-var dateString = "";
