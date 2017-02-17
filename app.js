@@ -16,27 +16,34 @@ var params = {
 };
 
 
-//function to call the user timeline API using our parameters
-function getTweet(){
+//function to call the user timeline API using our parameters.
+//instead of returning the result, we give it to a callback function.
+//the callback function will in this case write the tweet to the HTTP response.
+function getTweet(callback){
+  console.log("getting tweet");
   client.get('statuses/user_timeline', params, function(error, tweets, response) {
     if (!error) {
-      //console.log(tweets) ;
       var random = Math.floor(Math.random() * params.count) + 1;
-      var selectedTweet = tweets[random].id;
-      console.log(selectedTweet);
-      return selectedTweet;
+      var selectedTweet = tweets[random].id_str;
+      callback(selectedTweet);
     } else {
       console.log("error:\n");
       console.log(error);
-      return error;
+      callback(error);
     }
   });
 }
 
 //create web server.  Upon valid request, call the getTweet function.
-var server = http.createServer(function(req, res) {
-  res.writeHead(200);
-  res.end(getTweet);
+var server = http.createServer(function(request, response) {
+    response.setHeader('Content-Type', 'text/plain');
+    //pass an anonymous function as callback to getTweet.  in this callback, we write
+    //the tweet data to the http response once the function has finished.
+    getTweet(function(data){
+      response.write(data);
+      response.end();
+    });
 });
+
 
 server.listen(8080);
