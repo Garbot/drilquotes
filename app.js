@@ -20,7 +20,7 @@ var params = {
 function getTweet(){
   client.get('statuses/user_timeline', params, function(error, tweets, response) {
     if (!error) {
-      //console.log(tweets);
+      //console.log(tweets) ;
       var random = Math.floor(Math.random() * params.count) + 1;
       var selectedTweet = tweets[random].id;
       console.log(selectedTweet);
