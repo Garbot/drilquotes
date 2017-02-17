@@ -11,8 +11,8 @@ var client = new Twitter({
 
 //establish parameters for our request
 var params = {
-  screen_name: 'dril',
-  count: 5
+  screen_name: 'dril',  //twitter handle
+  count: 5              //number of tweets to return
 };
 
 
@@ -33,7 +33,7 @@ function getTweet(){
   });
 }
 
-
+//create web server.  Upon valid request, call the getTweet function.
 var server = http.createServer(function(req, res) {
   res.writeHead(200);
   res.end(getTweet);
