@@ -36,14 +36,33 @@ function getTweet(callback){
 
 //create web server.  Upon valid request, call the getTweet function.
 var server = http.createServer(function(request, response) {
-    response.setHeader('Content-Type', 'text/plain');
+    response.setHeader('Content-Type', 'application/javascript');
     //pass an anonymous function as callback to getTweet.  in this callback, we write
     //the tweet data to the http response once the function has finished.
     getTweet(function(data){
       response.write(data);
-      response.end();
+      response.end("test");
     });
 });
 
+// Add headers
+app.use(function (req, res, next) {
+
+    // Website you wish to allow to connect
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8888');
+
+    // Request methods you wish to allow
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+
+    // Request headers you wish to allow
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+
+    // Set to true if you need the website to include cookies in the requests sent
+    // to the API (e.g. in case you use sessions)
+    res.setHeader('Access-Control-Allow-Credentials', true);
+
+    // Pass to next layer of middleware
+    next();
+});
 
 server.listen(8080);
