@@ -12,7 +12,7 @@ var client = new Twitter({
 //establish parameters for our request
 var params = {
   screen_name: 'dril',  //twitter handle
-  count: 5              //number of tweets to return
+  count: 200              //number of tweets to return
 };
 
 
@@ -25,7 +25,7 @@ function getTweet(callback){
     if (!error) {
       var random = Math.floor(Math.random() * params.count);
       var selectedTweet = tweets[random].id_str;
-      callback(selectedTweet);
+      callback(selectedTweet)
     } else {
       console.log("error:\n");
       console.log(error);
@@ -52,9 +52,29 @@ var server = http.createServer(function(request, response) {
 
     //pass an anonymous function as callback to getTweet.  in this callback, we write
     //the tweet data to the http response once the function has finished.
-    getTweet(function(data){
-      response.write(data);
-      response.end();
+    getTweet(function(tweet){
+      //variable data will be tweet id
+      var oembed_params = {
+        id: tweet,
+        url: "https://twitter.com/dril/status/" + tweet
+      }
+
+      var finalTweet = "";
+
+      client.get('https://publish.twitter.com/oembed', oembed_params, function(error, tweets) {
+        if (!error) {
+          finalTweet += tweets.html;
+
+        } else {
+          console.log("error:\n");
+          console.log(error);
+        }
+        response.write(finalTweet);
+        response.end();
+      });
+
+
+
     });
 
 });
