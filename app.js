@@ -37,21 +37,26 @@ function getTweet(callback){
 //create web server.  Upon valid request, call the getTweet function.
 var server = http.createServer(function(request, response) {
     response.setHeader('Content-Type', 'application/javascript');
-    response.setHeader('Access-Control-Allow-Origin', '*');
+
+    //see https://gist.github.com/balupton/3696140
+    response.setHeader('Access-Control-Allow-Origin', 'http://localhost:8000');
     response.setHeader('Access-Control-Request-Method', '*');
     response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
     response.setHeader('Access-Control-Allow-Headers', '*');
+
     if ( request.method === 'OPTIONS' ) {
       response.writeHead(200);
       response.end();
       return;
     }
+
     //pass an anonymous function as callback to getTweet.  in this callback, we write
     //the tweet data to the http response once the function has finished.
     getTweet(function(data){
       response.write(data);
-      response.end("test");
+      response.end();
     });
+
 });
 
 server.listen(8080);
