@@ -25,7 +25,14 @@ function getTweet(callback){
     if (!error) {
       var random = Math.floor(Math.random() * params.count);
       var selectedTweet = tweets[random].id_str;
-      callback(selectedTweet)
+
+      /*
+       *Execute the callback function using the ID from the randomly selected tweet.
+       *In this case, an anonymous function will be passed that will call a separate
+       *Twitter API (Oembed) with the randomly chosen tweet ID.
+       */
+      callback(selectedTweet);
+
     } else {
       console.log("error:\n");
       console.log(error);
@@ -50,8 +57,12 @@ var server = http.createServer(function(request, response) {
       return;
     }
 
-    //pass an anonymous function as callback to getTweet.  in this callback, we write
-    //the tweet data to the http response once the function has finished.
+    /* pass an anonymous function as callback to getTweet.  in this callback, we write
+     * the tweet data to the http response once the function has finished.  getTweet
+     * will retrieve a random tweet id, which is passed to the anonymous function below.
+     * The anonymous function then calls the oembed API using the parameters contained in
+     * oembed_params and returns embeddable HTML.
+     */
     getTweet(function(tweet){
       //variable data will be tweet id
       var oembed_params = {
