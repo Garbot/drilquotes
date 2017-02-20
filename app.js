@@ -39,7 +39,7 @@ var server = http.createServer(function(request, response) {
     response.setHeader('Content-Type', 'application/javascript');
 
     //see https://gist.github.com/balupton/3696140
-    response.setHeader('Access-Control-Allow-Origin', 'http://localhost:8000');
+    response.setHeader('Access-Control-Allow-Origin', 'http://drilquotes.s3-website.us-east-2.amazonaws.com/');
     response.setHeader('Access-Control-Request-Method', '*');
     response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
     response.setHeader('Access-Control-Allow-Headers', '*');
